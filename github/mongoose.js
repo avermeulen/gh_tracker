@@ -12,7 +12,8 @@ var ActivitySchema = new Schema({
 	type : String,
 	repositoryUrl : String,
 	repositoryName : String,
-	created : String
+	created : Date,
+	date : String
 });
 
 var CoderSchema = new Schema({

@@ -13,6 +13,8 @@ var repositoryList = ["Repo 1", "Other repo", "yet another repo"];
 
 var RecentCommitsView = React.createClass({
 	render : function(){
+
+		this.props.events = this.props.events || [];
 		var commits = this.props.events.map(function(commit){
 				return <RecentCommit commit={commit} />
 			});
@@ -38,6 +40,8 @@ var RepositoryView = React.createClass({
 var RepositoryListView = React.createClass({
 
 	render : function(){
+
+		this.props.repositories = this.props.repositories || [];
 
 		var repositories = this.props.repositories.map(function(repository){
 			return <RepositoryView repositoryName={repository} />;
@@ -175,7 +179,7 @@ var App = React.createClass({
 
 	getInitialState : function(){
 		return {
-			coders : []
+			coders : this.props.coders
 		};
 	},
 
@@ -218,7 +222,10 @@ var App = React.createClass({
 	}
 });
 
+var coders = JSON.parse(document.getElementById('coderList').innerHTML);
+
+
 React.render(
-		<App />,
+		<App coders={coders}/>,
 		document.getElementById('coders')
 );

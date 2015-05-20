@@ -1,4 +1,5 @@
-var mongoose = require('./mongoose');
+var mongoose = require('./mongoose'),
+	moment = require('moment');
 
 module.exports = function () {
 
@@ -24,7 +25,8 @@ module.exports = function () {
                 type : event.type,
                 repositoryUrl : event.repo,
                 repositoryName : event.repo_name,
-                created : event.created_at
+                created : new Date(event.created_at),
+				date : moment(event.create_at).format("DD-MM-YYYY")
             }
         });
 

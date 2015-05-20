@@ -34,28 +34,18 @@ app.post('/coders', function(req, post){
 
 	req.getConnection(function(err, connection){
 
-
-
 	});
 
+});
+
+app.get('/hello', function(req, res){
+	res.render("hello", {colors : ['blue', 'red']})
 });
 
 
 app.get('/coders', function(req, res, next){
 
 	req.getConnection(function(err, connection){
-
-		/*
-		dao
-			.listAsync(connection, 'select * from coders', {})
-			.then(function(coders){
-				console.log(coders);
-				res.render('coders', {coders : coders})
-			})
-			.error(function(err){
-				next(err)
-			});
-		*/
 			
 		connection.query('select * from coders', {}, function(err, coders){
 			
@@ -64,7 +54,7 @@ app.get('/coders', function(req, res, next){
 			if (err)
 				return next(err)
 
-			res.render('coders', {coders : coders})
+			res.render('coders', {coders : JSON.stringify(coders)})
 		});
 		
 	});
