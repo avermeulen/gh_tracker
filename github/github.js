@@ -12,16 +12,17 @@ exports.userRepos = function(userName, cb){
 				else{
 					var repos = body.map(function(entry){
 	  					return {
+	  						id : entry.id,
+	  						user : entry.owner.login,
 	  					 	name : entry.name,
 	  					 	'created_at' : entry.created_at,
 	  					 	'updated_at' : entry.updated_at,
 	  					 	'pushed_at' : entry.pushed_at
 	  					 };
 	  				});
-  					cb(null, repos)
+  					cb(null, repos);
 				}
 		});
-
 	};
 
 exports.userEvents = function(userName, cb){

@@ -1,12 +1,13 @@
-
-var repositories = require("./github/repositories");
+var githubService = require("./github/github-service");
 var UserRepositoryManager = require("./github/user-repository-manager");
-var RepositoryStore = require("./github/repository-store");
+var RepositoryStore = require("./github/repository-store-mysql");
 
-var userRepoManager = new UserRepositoryManager(repositories, new RepositoryStore());
-
-exports.trackUser = function(userDetails, cb){
-
-    userRepoManager.track(userDetails, cb);
-
+module.exports = function (connection) {
+    
+    var userRepoManager = new UserRepositoryManager(githubService, new RepositoryStore(connection));
+        
+    this.trackUser = function(userDetails, cb){
+        userRepoManager.track(userDetails, cb);
+    };
+    
 };

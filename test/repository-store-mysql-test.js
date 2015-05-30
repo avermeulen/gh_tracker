@@ -10,8 +10,30 @@ describe("repository mysql store" , function () {
 
     });
 
+    it('should create user', function(done){
+
+        var data = {
+                firstName : "andre",
+                lastName : "vermeulen",
+                username : "av_tester"
+            };
+
+        var mySqlStore = new MySqlStore()
+
+        mySqlStore.manageUser(data, function(err, data){
+
+            assert.equal(err, undefined);
+            done();
+            
+        });
+
+    });
+
     it("should store", function(done){
 
+        done();
+        
+        /*
         var coderData = {
             firstName : userDetails.firstName,
             lastName : userDetails.lastName,
@@ -39,7 +61,6 @@ describe("repository mysql store" , function () {
 
 
         var mySqlStore = new MySqlStore();
-
         mySqlStore.store(coderData, function(err, user){
 
             assert.equal(null, err);
@@ -49,6 +70,7 @@ describe("repository mysql store" , function () {
             done();
 
         });
+        */
 
     });
 });

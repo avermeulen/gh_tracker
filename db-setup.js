@@ -1,8 +1,7 @@
+var mysql = require('mysql');
+var myConnection = require('express-myconnection');
 
 module.exports = function(app){
-
-	var mysql = require('mysql'), 
-    myConnection = require('express-myconnection');
 
 	var dbOptions = {
 	      host: 'localhost',

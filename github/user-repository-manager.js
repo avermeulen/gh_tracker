@@ -1,9 +1,9 @@
 var Promise = require('bluebird');
 
-var UserRepositoryActivity = function(repositories, repositoryStore){
+var UserRepositoryActivity = function(githubService, repositoryStore){
 
 	this.track = function(userDetails, cb){
-		repositories
+		githubService
 			.dataForUser(userDetails.username)
 			.then(function(details){
 				var events = details[0],
@@ -16,6 +16,7 @@ var UserRepositoryActivity = function(repositories, repositoryStore){
 
 						events : events,
 						repositories : repositories
+						
 					};
 
 				repositoryStore.store(userEntry, cb);

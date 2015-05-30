@@ -30,18 +30,6 @@ var dao = {
 
 dao = Promise.promisifyAll(dao);
 
-app.post('/coders', function(req, post){
-
-	req.getConnection(function(err, connection){
-
-	});
-
-});
-
-app.get('/hello', function(req, res){
-	res.render("hello", {colors : ['blue', 'red']})
-});
-
 
 app.get('/coders', function(req, res, next){
 
@@ -66,16 +54,43 @@ app.post('/api/coders', function(req, res, next){
 	
 	console.log("coder data : " + JSON.stringify(req.body));
 
-	var userData = {
+	var userDetails = {
 		firstName : req.body.firstName,
 		lastName : req.body.lastName,
 		username : req.body.username,
-		status : 'requested'
-	}
+		//status : 'requested'
+	};
+    
+	req.getConnection(function(err, connection){
+		connection.query("select * from coders where username = ?", [userDetails.username], function(err, coder){
+			//console.log(coder);
+	        if (coder && coder.length == 0){
+	            connection.query("insert into coders set ?", userDetails, 
+	            function(err, coder){
+	            	if (err){
+	                	console.log(err);
+	                	io.emit('error', {error : err});
+	            	}
+	            	else{
+	                	console.log(coder);
+	                	//cb(null, coder)
+	                	io.emit('coder_added', {data : userDetails});
+	            	}
+	            });
+	        }
+	        else{
+	            //cb(err, null);
+				console.log('coder already exists!');
+	            io.emit('coder_exists', {data : userDetails})
+	        }
+    	});
+	});
 
+	/*
 	trackUsers
 		.trackUserAsync(userData)
 		.then(function (userRepoInfo) {
+
 			console.log("coder added")
 			io.emit('coder_added', {data : userRepoInfo});
 
@@ -83,7 +98,7 @@ app.post('/api/coders', function(req, res, next){
 		.catch(function (err) {
 			console.log("err : " + err);
 		});
-
+	*/
 
 	/**
 
