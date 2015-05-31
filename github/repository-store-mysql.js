@@ -1,3 +1,4 @@
+var mysql = require('mysql');
 var async = require('async');
 var moment = require('moment');
 

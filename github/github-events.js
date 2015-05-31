@@ -23,13 +23,14 @@ GithubEvents.prototype.userEvents = function (username) {
 GithubEvents.prototype.userRepositories = function (username) {
 	var self = this;
 	
-	github.userRepos(username, function (err, repos) {
-		
+	github.userRepos(username, function (err, repos) {		
 		if (err)
 			self.emit('error', err)
 		else
 			self.emit('repositories', repos);
 	});
 };
+
+
 
 module.exports = GithubEvents;
