@@ -97,7 +97,6 @@ app.post('/api/coders', function(req, res, next){
 	            });
 	        }
 	        else{
-	            //cb(err, null);
 				console.log('coder already exists!');
 	            io.emit('coder_exists', {data : userDetails})
 	        }

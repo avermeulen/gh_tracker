@@ -61,7 +61,10 @@ var LastCodedBadgeView = React.createClass({
 		var labelStyle = "label";
 		
 		if (this.props.activeDaysAgo <= 1){
-			labelStyle += " label-success";	
+			labelStyle += " label-success";
+			return (
+				<span className={labelStyle}>Committed today</span>
+			);	
 		}
 		else if (this.props.activeDaysAgo <= 3){
 			labelStyle += " label-warning";	
@@ -186,7 +189,13 @@ var AddCoderView = React.createClass({
 	addCoder : function(e){
 		
 		$.post("api/coders", this.state, function(){
-			toastr.warning('Added coder...')
+			toastr.warning('Added coder...');
+			
+			self.setState({
+				lastName : "",
+				firstName : ""
+				});
+			
 		});
 
 		e.preventDefault();
@@ -205,7 +214,16 @@ var App = React.createClass({
 	componentDidMount : function(){
 		var i = 1;
 		var self = this;
-
+		
+		socket.on('events_updated', function(){
+			
+			$.get("api/coders", this.state, function(coders){
+				toastr.warning('Coders updated!');
+				self.setState({coders : coders});
+			});
+			
+		});
+		
 		socket.on('coder_added', function(input){
 
 			toastr.warning('Coder added!');
