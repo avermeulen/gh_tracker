@@ -82,12 +82,14 @@ var LastCodedBadgeView = React.createClass({
 
 var CoderView = React.createClass({
 	render: function(){
+		var githubURL = "https://github.com/" + this.props.githubUsername;
+		
 		return (
 
 			<div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xs-offset-0 col-sm-offset-0">
 				<div className="panel panel-default">
 				  	<div className="panel-heading">
-				  		<strong>{this.props.firstName} {this.props.lastName} - @{this.props.githubUsername}</strong>
+				  		<strong>{this.props.firstName} {this.props.lastName} - <a href={githubURL} target="_blank" > {this.props.githubUsername}</a></strong>
 			  		</div>
 
 					<div className="panel-body">
