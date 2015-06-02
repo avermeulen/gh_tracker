@@ -60,7 +60,7 @@ var LastCodedBadgeView = React.createClass({
 	render : function () {
 		var labelStyle = "label";
 		
-		if (this.props.activeDaysAgo <= 1){
+		if (this.props.activeDaysAgo === 0){
 			labelStyle += " label-success";
 			return (
 				<span className={labelStyle}>Committed today</span>
@@ -137,8 +137,7 @@ var FormField = React.createClass({
 			 </div>
 		);
 	}
-
-})
+});
 
 var AddCoderView = React.createClass({
 	getInitialState : function(){
@@ -162,6 +161,8 @@ var AddCoderView = React.createClass({
 
 				  <button type="submit" onClick={this.addCoder} className="btn btn-default" 
 				  	disabled={disabled} >Add coder</button>
+				  
+				  <button onClick={this.doRefresh} className="btn btn-default">Refresh</button>
 
 				</form>
 			</div>
@@ -185,9 +186,17 @@ var AddCoderView = React.createClass({
       		this.setState(state);
 		};
 	},
-
+	
+	doRefresh : function (e) {
+		$.get("/api/coders/refresh", function(data){
+			toastr.warning("Refreshing data for " +  data.coders + " coders");
+		});
+		e.preventDefault();
+	},
+	
 	addCoder : function(e){
 		
+		var self = this;
 		$.post("api/coders", this.state, function(){
 			toastr.warning('Added coder...');
 			

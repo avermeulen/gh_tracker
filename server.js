@@ -40,7 +40,7 @@ app.use(function (req, res, next) {
 });
 
 var getCoderData = function (connection, cb) {
-	var coderSql = "select firstname as firstName, lastname as lastName, username, coder_id, min(datediff(date(now()), date(created_at))) active_days_ago from events, coders where coders.id = events.coder_id  group by coder_id;";
+	var coderSql = "select firstname as firstName, lastname as lastName, username, coder_id, min(datediff(date(now()), date(created_at))) active_days_ago from events, coders where coders.id = events.coder_id  group by coder_id order by active_days_ago;";
 	connection.query(coderSql, {}, cb);
 };
 
@@ -82,28 +82,40 @@ app.post('/api/coders', function(req, res, next){
     
 	req.getConnection(function(err, connection){
 		connection.query("select * from coders where username = ?", [userDetails.username], function(err, coder){
-
 	        if (coder && coder.length == 0){
 	            connection.query("insert into coders set ?", userDetails, 
 	            function(err, coder){
 	            	if (err){
 	                	console.log(err);
 	                	io.emit('error', {error : err});
+						return;
 	            	}
-	            	else{
-	                	console.log(coder);	
-	                	io.emit('coder_added', {data : userDetails});
-	            	}
+	                io.emit('coder_added', {data : userDetails});
 	            });
 	        }
 	        else{
 				console.log('coder already exists!');
 	            io.emit('coder_exists', {data : userDetails})
 	        }
+			
 			githubProcessor.events(userDetails.username);
+			res.send({done : true});
     	});
 	});
 	
+});
+
+app.get('/api/coders/refresh', function (req, res) {
+	req.getConnection(function(err, connection){
+		//
+		connection.query("select username from coders", [], function (err, usernames) {
+			usernames.forEach(function (username) {
+				githubProcessor.events(username);
+			});
+			res.send({coders : usernames.length});
+		});
+		//
+	});
 });
 
 
