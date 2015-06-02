@@ -108,11 +108,12 @@ app.post('/api/coders', function(req, res, next){
 app.get('/api/coders/refresh', function (req, res) {
 	req.getConnection(function(err, connection){
 		//
-		connection.query("select username from coders", [], function (err, usernames) {
-			usernames.forEach(function (username) {
-				githubProcessor.events(username);
+		connection.query("select username from coders", [], function (err, coders) {
+			coders.forEach(function (coder) {
+				console.log(coder);
+				githubProcessor.events(coder.username);
 			});
-			res.send({coders : usernames.length});
+			res.send({coders : coders.length});
 		});
 		//
 	});
