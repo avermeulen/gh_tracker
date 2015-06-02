@@ -55,6 +55,28 @@ var RepositoryListView = React.createClass({
 	}
 });
 
+var LastCodedBadgeView = React.createClass({
+	
+	render : function () {
+		var labelStyle = "label";
+		
+		if (this.props.activeDaysAgo <= 1){
+			labelStyle += " label-success";	
+		}
+		else if (this.props.activeDaysAgo <= 3){
+			labelStyle += " label-warning";	
+		}
+		else {
+			labelStyle += " label-danger";	
+		};
+		
+		return (
+			<span className={labelStyle}>Committed {this.props.activeDaysAgo} days ago</span>
+		);	
+	}
+		
+});
+
 var CoderView = React.createClass({
 	render: function(){
 		return (
@@ -65,9 +87,8 @@ var CoderView = React.createClass({
 				  		<strong>{this.props.firstName} {this.props.lastName} - @{this.props.githubUsername}</strong>
 			  		</div>
 
-					<div className="panel-body">	
-						<RecentCommitsView events = {this.props.events} />
-						<RepositoryListView repositories = {this.props.repositoryList} />
+					<div className="panel-body">
+						<LastCodedBadgeView activeDaysAgo={this.props.activeDaysAgo}/>
 					</div>
 				</div>
 			</div>
@@ -88,6 +109,7 @@ var CoderListView = React.createClass({
 						   	firstName={coder.firstName}
 						   	lastName={coder.lastName}
 							githubUsername={coder.username}
+							activeDaysAgo = {coder.active_days_ago}
 							events={coder.events}
 						    repositoryList={coder.repositories} />
 				);
@@ -162,16 +184,13 @@ var AddCoderView = React.createClass({
 	},
 
 	addCoder : function(e){
-		//alert();
-
-		toastr.warning('Added coder...')
-
+		
 		$.post("api/coders", this.state, function(){
-
-
+			toastr.warning('Added coder...')
 		});
 
 		e.preventDefault();
+		
 	}
 });
 

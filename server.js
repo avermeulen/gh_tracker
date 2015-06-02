@@ -39,23 +39,34 @@ app.use(function (req, res, next) {
   		next();
 });
 
+var getCoderData = function (connection, cb) {
+	var coderSql = "select firstname as firstName, lastname as lastName, username, coder_id, min(datediff(date(now()), date(created_at))) active_days_ago from events, coders where coders.id = events.coder_id  group by coder_id;";
+	connection.query(coderSql, {}, cb);
+};
+
 app.get('/coders', function(req, res, next){
-
 	req.getConnection(function(err, connection){
-			
-		connection.query('select * from coders', {}, function(err, coders){
-			
-			//console.log(arguments);
-
-			if (err)
+		getCoderData(connection, function(err, coders){
+			if (err){
 				return next(err);
-
+			}
 			res.render('coders', {coders : JSON.stringify(coders)})
 		});
-		
+	});
+});
+
+app.get('/api/coders', function (req, res) {
+	
+	req.getConnection(function(err, connection){
+		getCoderData(connection, function(err, coders){
+			if (err){
+				//return next(err);
+				res.send({});
+			}
+			res.send(coders);
+		});
 	});
 	
-
 });
 
 app.post('/api/coders', function(req, res, next){
