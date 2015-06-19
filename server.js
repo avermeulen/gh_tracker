@@ -44,7 +44,7 @@ var getCoderData = function (connection, cb) {
 	connection.query(coderSql, {}, cb);
 };
 
-app.get('/coders', function(req, res, next){
+app.get('/', function(req, res, next){
 	req.getConnection(function(err, connection){
 		getCoderData(connection, function(err, coders){
 			if (err){
