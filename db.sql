@@ -1,3 +1,9 @@
+
+CREATE DATABASE gh;
+CREATE USER gh_tracker@localhost IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON gh.* TO gh_tracker@localhost;
+FLUSH PRIVILEGES;
+
 create table coders(
 	id int auto_increment not null,
 	firstName char(100),

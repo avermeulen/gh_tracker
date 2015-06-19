@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var myConnection = require('express-myconnection');
 
 module.exports = function(app){
-
+	
 	var dbOptions = {
 	      host: 'localhost',
 	      user: 'gh',
