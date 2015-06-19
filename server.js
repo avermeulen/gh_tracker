@@ -119,8 +119,8 @@ app.get('/api/coders/refresh', function (req, res) {
 	});
 });
 
-
-var server = http.listen(3000, function () {
+var port = process.env.GH_TRACKER_PORT || 3000;
+var server = http.listen(port, function () {
 
   var host = server.address().address
   var port = server.address().port
