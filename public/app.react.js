@@ -2,60 +2,60 @@
 
 var socket = io();
 
-var RecentCommit = React.createClass({
+var RecentCommit = React.createClass({displayName: "RecentCommit",
 	render : function(){
-		return (<li>{this.props.commit.type} @ {this.props.commit.repositoryName} </li>);
+		return (React.createElement("li", null, this.props.commit.type, " @ ", this.props.commit.repositoryName, " "));
 	}
 });
 
 var commitList = ["Commit One", "Commit Three", "Commit 900", "Commit...", "Commit 111"];
 var repositoryList = ["Repo 1", "Other repo", "yet another repo"];
 
-var RecentCommitsView = React.createClass({
+var RecentCommitsView = React.createClass({displayName: "RecentCommitsView",
 	render : function(){
 
 		this.props.events = this.props.events || [];
 		var commits = this.props.events.map(function(commit){
-				return <RecentCommit commit={commit} />
+				return React.createElement(RecentCommit, {commit: commit})
 			});
 
 		return(
-			<span>
-				<strong>Recent commits</strong>
-				<ul>{commits}</ul>
-			</span>
+			React.createElement("span", null, 
+				React.createElement("strong", null, "Recent commits"), 
+				React.createElement("ul", null, commits)
+			)
 			);
 	}
 });
 
-var RepositoryView = React.createClass({
+var RepositoryView = React.createClass({displayName: "RepositoryView",
 	render : function(){
 
 		return (
-			<span className="label label-default">{this.props.repositoryName}</span>
+			React.createElement("span", {className: "label label-default"}, this.props.repositoryName)
 		);
 	}
 });
 
-var RepositoryListView = React.createClass({
+var RepositoryListView = React.createClass({displayName: "RepositoryListView",
 
 	render : function(){
 
 		this.props.repositories = this.props.repositories || [];
 
 		var repositories = this.props.repositories.map(function(repository){
-			return <RepositoryView repositoryName={repository} />;
+			return React.createElement(RepositoryView, {repositoryName: repository});
 		});
 
-		return (<span>
-			<strong>Repositories</strong>
-			<br/>
-			{repositories}
-		</span>);
+		return (React.createElement("span", null, 
+			React.createElement("strong", null, "Repositories"), 
+			React.createElement("br", null), 
+			repositories
+		));
 	}
 });
 
-var LastCodedBadgeView = React.createClass({
+var LastCodedBadgeView = React.createClass({displayName: "LastCodedBadgeView",
 	
 	render : function () {
 		var labelStyle = "label";
@@ -63,7 +63,7 @@ var LastCodedBadgeView = React.createClass({
 		if (this.props.activeDaysAgo === 0){
 			labelStyle += " label-success";
 			return (
-				<span className={labelStyle}>Committed today</span>
+				React.createElement("span", {className: labelStyle}, "Committed today")
 			);	
 		}
 		else if (this.props.activeDaysAgo <= 3){
@@ -74,34 +74,34 @@ var LastCodedBadgeView = React.createClass({
 		};
 		
 		return (
-			<span className={labelStyle}>Committed {this.props.activeDaysAgo} days ago</span>
+			React.createElement("span", {className: labelStyle}, "Committed ", this.props.activeDaysAgo, " days ago")
 		);	
 	}
 		
 });
 
-var CoderView = React.createClass({
+var CoderView = React.createClass({displayName: "CoderView",
 	render: function(){
 		var githubURL = "https://github.com/" + this.props.githubUsername;
 		
 		return (
 
-			<div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xs-offset-0 col-sm-offset-0">
-				<div className="panel panel-default">
-				  	<div className="panel-heading">
-				  		<strong>{this.props.firstName} {this.props.lastName} - <a href={githubURL} target="_blank" > {this.props.githubUsername}</a></strong>
-			  		</div>
+			React.createElement("div", {className: "col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xs-offset-0 col-sm-offset-0"}, 
+				React.createElement("div", {className: "panel panel-default"}, 
+				  	React.createElement("div", {className: "panel-heading"}, 
+				  		React.createElement("strong", null, this.props.firstName, " ", this.props.lastName, " - ", React.createElement("a", {href: githubURL, target: "_blank"}, " ", this.props.githubUsername))
+			  		), 
 
-					<div className="panel-body">
-						<LastCodedBadgeView activeDaysAgo={this.props.activeDaysAgo}/>
-					</div>
-				</div>
-			</div>
+					React.createElement("div", {className: "panel-body"}, 
+						React.createElement(LastCodedBadgeView, {activeDaysAgo: this.props.activeDaysAgo})
+					)
+				)
+			)
 		)
 	}
 });
 
-var CoderListView = React.createClass({
+var CoderListView = React.createClass({displayName: "CoderListView",
 	
 	render : function(){
 
@@ -110,38 +110,38 @@ var CoderListView = React.createClass({
 		var coderViews = coders.map(function(coder){
 			key++;
 			return (
-				<CoderView 	key={key}
-						   	firstName={coder.firstName}
-						   	lastName={coder.lastName}
-							githubUsername={coder.username}
-							activeDaysAgo = {coder.active_days_ago}
-							events={coder.events}
-						    repositoryList={coder.repositories} />
+				React.createElement(CoderView, {	key: key, 
+						   	firstName: coder.firstName, 
+						   	lastName: coder.lastName, 
+							githubUsername: coder.username, 
+							activeDaysAgo: coder.active_days_ago, 
+							events: coder.events, 
+						    repositoryList: coder.repositories})
 				);
 		});
 
 		return (
-			<div className="row user-row">
-				{coderViews}	
-			</div>
+			React.createElement("div", {className: "row user-row"}, 
+				coderViews	
+			)
 		);
 	}
 });
 
-var FormField = React.createClass({
+var FormField = React.createClass({displayName: "FormField",
 	render : function(){
 		return (
-			<div className="form-group">
-			    <label for={this.props.fieldName}>{this.props.caption}
-			    	<input type="text" className="form-control" id={this.props.fieldName} name={this.props.fieldName} 
-			    	onBlur={this.props.onBlur} />
-			    </label>
-			 </div>
+			React.createElement("div", {className: "form-group"}, 
+			    React.createElement("label", {for: this.props.fieldName}, this.props.caption, 
+			    	React.createElement("input", {type: "text", className: "form-control", id: this.props.fieldName, name: this.props.fieldName, 
+			    	onBlur: this.props.onBlur})
+			    )
+			 )
 		);
 	}
 });
 
-var AddCoderView = React.createClass({
+var AddCoderView = React.createClass({displayName: "AddCoderView",
 	getInitialState : function(){
 		return {
 			firstName : "",
@@ -154,20 +154,20 @@ var AddCoderView = React.createClass({
 		var disabled = this.isDisabled();
 
 		return (
-			<div className="row well">
-				<form className="form-inline" method="post" action="/coders" autocomplete="off">
+			React.createElement("div", {className: "row well"}, 
+				React.createElement("form", {className: "form-inline", method: "post", action: "/coders", autocomplete: "off"}, 
 
-				  <FormField fieldName="firstName" ref="firstName" caption="First name" onBlur={this.handleChange('firstName').bind(this)} />
-				  <FormField fieldName="lastName" ref="lastName" caption="Last name" onBlur={this.handleChange('lastName').bind(this)}/>
-				  <FormField fieldName="username" ref="username" caption="Github username" onBlur={this.handleChange('username').bind(this)} />
+				  React.createElement(FormField, {fieldName: "firstName", ref: "firstName", caption: "First name", onBlur: this.handleChange('firstName').bind(this)}), 
+				  React.createElement(FormField, {fieldName: "lastName", ref: "lastName", caption: "Last name", onBlur: this.handleChange('lastName').bind(this)}), 
+				  React.createElement(FormField, {fieldName: "username", ref: "username", caption: "Github username", onBlur: this.handleChange('username').bind(this)}), 
 
-				  <button type="submit" onClick={this.addCoder} className="btn btn-default" 
-				  	disabled={disabled} >Add coder</button>
+				  React.createElement("button", {type: "submit", onClick: this.addCoder, className: "btn btn-default", 
+				  	disabled: disabled}, "Add coder"), 
 				  
-				  <button onClick={this.doRefresh} className="btn btn-default">Refresh</button>
+				  React.createElement("button", {onClick: this.doRefresh, className: "btn btn-default"}, "Refresh")
 
-				</form>
-			</div>
+				)
+			)
 			);
 	},
 
@@ -214,7 +214,7 @@ var AddCoderView = React.createClass({
 	}
 });
 
-var App = React.createClass({
+var App = React.createClass({displayName: "App",
 
 	getInitialState : function(){
 		return {
@@ -259,12 +259,12 @@ var App = React.createClass({
 	render : function(){
 		return (
 
-			<div>
-				<h1>Github overview</h1>
-				<h2>Coders</h2>
-				<AddCoderView />	
-				<CoderListView coders={this.state.coders} />
-			</div>
+			React.createElement("div", null, 
+				React.createElement("h1", null, "Github overview"), 
+				React.createElement("h2", null, "Coders"), 
+				React.createElement(AddCoderView, null), 	
+				React.createElement(CoderListView, {coders: this.state.coders})
+			)
 
 		);
 	}
@@ -274,6 +274,6 @@ var coders = JSON.parse(document.getElementById('coderList').innerHTML);
 
 
 React.render(
-		<App coders={coders}/>,
+		React.createElement(App, {coders: coders}),
 		document.getElementById('coders')
 );

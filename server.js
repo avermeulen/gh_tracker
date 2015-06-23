@@ -13,9 +13,9 @@ var githubProcessor = null;
 var http = require('http').Server(app);
 var io = require('socket.io').listen(http);
 
-new DatabaseSetup(app);
+var logger=require('./log.js'); 
 
-//var githubProcessor = new GithubProcessor();
+new DatabaseSetup(app);
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
@@ -60,8 +60,9 @@ app.get('/api/coders', function (req, res) {
 	req.getConnection(function(err, connection){
 		getCoderData(connection, function(err, coders){
 			if (err){
-				//return next(err);
-				res.send({});
+				logger.error(err);
+				//return next
+				return res.send({});
 			}
 			res.send(coders);
 		});
@@ -86,7 +87,7 @@ app.post('/api/coders', function(req, res, next){
 	            connection.query("insert into coders set ?", userDetails, 
 	            function(err, coder){
 	            	if (err){
-	                	console.log(err);
+	                	logger.info(err);
 	                	io.emit('error', {error : err});
 						return;
 	            	}
@@ -94,7 +95,7 @@ app.post('/api/coders', function(req, res, next){
 	            });
 	        }
 	        else{
-				console.log('coder already exists!');
+				logger.error('coder already exists!');
 	            io.emit('coder_exists', {data : userDetails})
 	        }
 			
@@ -110,7 +111,6 @@ app.get('/api/coders/refresh', function (req, res) {
 		//
 		connection.query("select username from coders", [], function (err, coders) {
 			coders.forEach(function (coder) {
-				console.log(coder);
 				githubProcessor.events(coder.username);
 			});
 			res.send({coders : coders.length});
@@ -125,6 +125,7 @@ var server = http.listen(port, function () {
   var host = server.address().address
   var port = server.address().port
 
+  logger.log('info', 'starting up...');
   console.log('Example app listening at http://%s:%s', host, port)
 
 })
