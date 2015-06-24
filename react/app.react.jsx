@@ -133,8 +133,8 @@ var FormField = React.createClass({
 		return (
 			<div className="form-group">
 			    <label for={this.props.fieldName}>{this.props.caption}
-			    	<input type="text" className="form-control" id={this.props.fieldName} name={this.props.fieldName} 
-			    	onBlur={this.props.onBlur} />
+			    	<input type="text" className="form-control" value={this.props.value} id={this.props.fieldName} name={this.props.fieldName} 
+			    	onChange={this.props.onChange} />
 			    </label>
 			 </div>
 		);
@@ -157,9 +157,9 @@ var AddCoderView = React.createClass({
 			<div className="row well">
 				<form className="form-inline" method="post" action="/coders" autocomplete="off">
 
-				  <FormField fieldName="firstName" ref="firstName" caption="First name" onBlur={this.handleChange('firstName').bind(this)} />
-				  <FormField fieldName="lastName" ref="lastName" caption="Last name" onBlur={this.handleChange('lastName').bind(this)}/>
-				  <FormField fieldName="username" ref="username" caption="Github username" onBlur={this.handleChange('username').bind(this)} />
+				  <FormField fieldName="firstName" ref="firstName" value={this.state.firstName} caption="First name" onChange={this.handleChange('firstName').bind(this)} />
+				  <FormField fieldName="lastName" ref="lastName" value={this.state.lastName} caption="Last name" onChange={this.handleChange('lastName').bind(this)}/>
+				  <FormField fieldName="username" ref="username" value={this.state.username} caption="Github username" onChange={this.handleChange('username').bind(this)} />
 
 				  <button type="submit" onClick={this.addCoder} className="btn btn-default" 
 				  	disabled={disabled} >Add coder</button>
@@ -204,8 +204,9 @@ var AddCoderView = React.createClass({
 			
 			self.setState({
 				lastName : "",
-				firstName : ""
-				});
+				firstName : "",
+				username : ""
+			});
 			
 		});
 

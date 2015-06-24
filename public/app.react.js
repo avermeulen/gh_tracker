@@ -133,8 +133,8 @@ var FormField = React.createClass({displayName: "FormField",
 		return (
 			React.createElement("div", {className: "form-group"}, 
 			    React.createElement("label", {for: this.props.fieldName}, this.props.caption, 
-			    	React.createElement("input", {type: "text", className: "form-control", id: this.props.fieldName, name: this.props.fieldName, 
-			    	onBlur: this.props.onBlur})
+			    	React.createElement("input", {type: "text", className: "form-control", value: this.props.value, id: this.props.fieldName, name: this.props.fieldName, 
+			    	onChange: this.props.onChange})
 			    )
 			 )
 		);
@@ -157,9 +157,9 @@ var AddCoderView = React.createClass({displayName: "AddCoderView",
 			React.createElement("div", {className: "row well"}, 
 				React.createElement("form", {className: "form-inline", method: "post", action: "/coders", autocomplete: "off"}, 
 
-				  React.createElement(FormField, {fieldName: "firstName", ref: "firstName", caption: "First name", onBlur: this.handleChange('firstName').bind(this)}), 
-				  React.createElement(FormField, {fieldName: "lastName", ref: "lastName", caption: "Last name", onBlur: this.handleChange('lastName').bind(this)}), 
-				  React.createElement(FormField, {fieldName: "username", ref: "username", caption: "Github username", onBlur: this.handleChange('username').bind(this)}), 
+				  React.createElement(FormField, {fieldName: "firstName", ref: "firstName", value: this.state.firstName, caption: "First name", onChange: this.handleChange('firstName').bind(this)}), 
+				  React.createElement(FormField, {fieldName: "lastName", ref: "lastName", value: this.state.lastName, caption: "Last name", onChange: this.handleChange('lastName').bind(this)}), 
+				  React.createElement(FormField, {fieldName: "username", ref: "username", value: this.state.username, caption: "Github username", onChange: this.handleChange('username').bind(this)}), 
 
 				  React.createElement("button", {type: "submit", onClick: this.addCoder, className: "btn btn-default", 
 				  	disabled: disabled}, "Add coder"), 
@@ -204,8 +204,9 @@ var AddCoderView = React.createClass({displayName: "AddCoderView",
 			
 			self.setState({
 				lastName : "",
-				firstName : ""
-				});
+				firstName : "",
+				username : ""
+			});
 			
 		});
 
