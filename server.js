@@ -48,6 +48,7 @@ app.get('/', function(req, res, next){
 	req.getConnection(function(err, connection){
 		getCoderData(connection, function(err, coders){
 			if (err){
+				logger.error(err.stack);
 				return next(err);
 			}
 			res.render('coders', {coders : JSON.stringify(coders)})
@@ -60,7 +61,7 @@ app.get('/api/coders', function (req, res) {
 	req.getConnection(function(err, connection){
 		getCoderData(connection, function(err, coders){
 			if (err){
-				logger.error(err);
+				logger.error(err.stack);
 				//return next
 				return res.send({});
 			}
@@ -87,7 +88,7 @@ app.post('/api/coders', function(req, res, next){
 	            connection.query("insert into coders set ?", userDetails, 
 	            function(err, coder){
 	            	if (err){
-	                	logger.info(err);
+	                	logger.error(err.stack);
 	                	io.emit('error', {error : err});
 						return;
 	            	}
@@ -110,9 +111,16 @@ app.get('/api/coders/refresh', function (req, res) {
 	req.getConnection(function(err, connection){
 		//
 		connection.query("select username from coders", [], function (err, coders) {
+			if (err){
+            	logger.error(err.stack);
+            	io.emit('error', {error : err});
+				return;
+        	}
+
 			coders.forEach(function (coder) {
 				githubProcessor.events(coder.username);
 			});
+			
 			res.send({coders : coders.length});
 		});
 		//

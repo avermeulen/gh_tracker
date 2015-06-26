@@ -13,7 +13,7 @@ module.exports = function (updateDetails) {
 	
 	gevents.on('error', function (err) {
 		// publish errors
-		logger.error(err);
+		logger.error(err.stack);
 	});
 	
 	this.events = function (username) {
