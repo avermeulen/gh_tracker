@@ -1,6 +1,7 @@
 var github = require("octonode");
 
-var client = github.client();
+var githubToken = process.env.GITHUB_TOKEN || '';
+var client = githubToken === '' ? github.client() : github.client(githubToken);
 
 exports.userRepos = function(userName, cb){
 
