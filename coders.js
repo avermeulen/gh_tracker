@@ -21,6 +21,18 @@ module.exports = function(io){
 		});
 	};
 
+	this.all = function(req, res, next){
+		req.getConnection(function(err, connection){
+			getCoderData(connection, function(err, coders){
+				if (err){
+					logger.error(err.stack);
+					return res.send({});
+				}
+				res.send(coders);
+			});
+		});
+	};
+
 	this.add = function(req, res, next){
 		var userDetails = {
 			firstName : req.body.firstName,

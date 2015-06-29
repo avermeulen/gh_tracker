@@ -31,6 +31,8 @@ app.use(express.static('public'));
 
 var coders = new Coders(io);
 app.get('/', coders.list);
+
+-app.get('/api/coders', coders.all);
 app.post('/api/coders', coders.add);
 app.get('/api/coders/refresh', coders.refresh);
 
