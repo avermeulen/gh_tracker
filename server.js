@@ -8,6 +8,12 @@ var myConnection = require('express-myconnection');
 var logger=require('./log.js'); 
 var Coders = require('./coders');
 
+var CoderService = require('./coder-service');
+var GithubProcessor = require('./github-processor');
+var UpdateDetails = require('./update-details');
+
+var ConnectionProvider = require('./connection-provider');
+
 //setup socket io
 var http = require('http').Server(app);
 var io = require('socket.io').listen(http);
@@ -19,6 +25,17 @@ var dbOptions = {
       port: 3306,
       database: 'gh_tracker'
 };
+
+var serviceSetupCallback = function(connection){
+	return {
+		coderService : new CoderService(connection),
+		githubProcessor : new GithubProcessor(new UpdateDetails(connection, io))
+	}
+};
+
+var myConnectionProvider = new ConnectionProvider(dbOptions, serviceSetupCallback);
+app.use(myConnectionProvider.setupProvider);
+
 app.use(myConnection(mysql, dbOptions, 'pool'));
 //
 app.engine('handlebars', exphbs({defaultLayout: 'main'}))
@@ -32,7 +49,7 @@ app.use(express.static('public'));
 var coders = new Coders(io);
 app.get('/', coders.list);
 
--app.get('/api/coders', coders.all);
+app.get('/api/coders', coders.all);
 app.post('/api/coders', coders.add);
 app.get('/api/coders/refresh', coders.refresh);
 
