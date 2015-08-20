@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var Promise = require('bluebird');
 var mysql = require('mysql');
 var myConnection = require('express-myconnection');
-var logger=require('./log.js'); 
+var logger=require('./log.js');
 var Coders = require('./coders');
 
 var CoderService = require('./coder-service');
