@@ -1,19 +1,18 @@
 var mysql = require('mysql');
 
 module.exports = function (dbParams, servicesSetup) {
-	
+
     if (!dbParams) throw Error('Database parameters not supplied');
         if (!servicesSetup) throw Error('Service setup callback not supplied');
 
-	this.dbParams = dbParams;
-	var pool = mysql.createPool(dbParams);
+		this.dbParams = dbParams;
+		var pool = mysql.createPool(dbParams);
 
     var setupProvider = function(req, res, next){
 
     	var poolConnection;
-
     	req.services = function (callback) {
-                
+
             pool.getConnection(function (err, connection) {
                 if (err){
                 	return callback(err);

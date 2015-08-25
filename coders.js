@@ -19,7 +19,7 @@ module.exports = function(io){
 				});
 		});
 	};
-
+	
 	this.all = function(req, res, next){
 		req.services(function(err, services){
 
@@ -49,28 +49,30 @@ module.exports = function(io){
 
 			var githubProcessor = services.githubProcessor;
 			var coderService = services.coderService;
+			//
+			var addCoder = function(coder){
+				if (coder && coder.length == 0){
+					coderService
+						.createCoder(userDetails)
+						.then(function(coder){
+								io.emit('coder_added', {data : userDetails});
+						})
+						.catch(function(err) {
+							logger.error(err.stack);
+							io.emit('error', {error : err});
+						});
+				}
+				else{
+						logger.error('coder already exists!');
+						io.emit('coder_exists', {data : userDetails})
+				}
+				githubProcessor.getUserEvents(userDetails.username);
+				res.send({done : true});
+			};
 
-			coderService.findCoderByUsername(userDetails.username)
-			.then(function(coder){
-				//
-	        if (coder && coder.length == 0){
-	        	coderService
-							.createCoder(userDetails)
-							.then(function(coder){
-	              	io.emit('coder_added', {data : userDetails});
-	          	})
-							.catch(function(err) {
-								logger.error(err.stack);
-								io.emit('error', {error : err});
-							});
-	        }
-	        else{
-							logger.error('coder already exists!');
-	            io.emit('coder_exists', {data : userDetails})
-	        }
-					githubProcessor.getUserEvents(userDetails.username);
-					res.send({done : true});
-	    	});
+			coderService
+				.findCoderByUsername(userDetails.username)
+				.then(addCoder);
 		});
 	};
 

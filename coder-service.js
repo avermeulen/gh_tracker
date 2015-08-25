@@ -1,20 +1,5 @@
-var Promise = require("bluebird");
-
-var Query = function(connection){
-	this.execute = function (query, params) {
-		var queryParams = params || {};
-		return new Promise(function (resolve, reject) {
-			connection.query(query, queryParams, function (err, results) {
-				if(err){
-					return reject(err);
-				}
-				else {
-					resolve(results);
-				}
-			});
-		});
-	}
-};
+var Promise = require("bluebird"),
+		Query = require("./query-promise");
 
 module.exports = function (connection) {
 
@@ -40,6 +25,6 @@ module.exports = function (connection) {
 	this.findCommitsPerWeek = function(){
 		var sql = "select username, week(created_at), count(*) from coders join events where events.coder_id = coders.id group by username, week(created_at)"
 		return query.execute(sql);
-	}
-
+	};
+	
 }

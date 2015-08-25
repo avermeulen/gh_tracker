@@ -110,7 +110,7 @@ var CoderListView = React.createClass({displayName: "CoderListView",
 		var coderViews = coders.map(function(coder){
 			key++;
 			return (
-				React.createElement(CoderView, {	key: key, 
+				React.createElement(CoderView, { key: key, 
 						   	firstName: coder.firstName, 
 						   	lastName: coder.lastName, 
 							githubUsername: coder.username, 
