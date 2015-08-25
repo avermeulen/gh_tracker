@@ -16,8 +16,8 @@ var RecentCommitsView = React.createClass({displayName: "RecentCommitsView",
 
 		this.props.events = this.props.events || [];
 		var commits = this.props.events.map(function(commit){
-				return React.createElement(RecentCommit, {commit: commit})
-			});
+			return React.createElement(RecentCommit, {commit: commit})
+		});
 
 		return(
 			React.createElement("span", null, 
@@ -47,43 +47,44 @@ var RepositoryListView = React.createClass({displayName: "RepositoryListView",
 			return React.createElement(RepositoryView, {repositoryName: repository});
 		});
 
-		return (React.createElement("span", null, 
-			React.createElement("strong", null, "Repositories"), 
-			React.createElement("br", null), 
-			repositories
+		return (
+			React.createElement("span", null, 
+				React.createElement("strong", null, "Repositories"), 
+				React.createElement("br", null), 
+				repositories
 		));
 	}
 });
 
 var LastCodedBadgeView = React.createClass({displayName: "LastCodedBadgeView",
-	
+
 	render : function () {
 		var labelStyle = "label";
-		
+
 		if (this.props.activeDaysAgo === 0){
 			labelStyle += " label-success";
 			return (
 				React.createElement("span", {className: labelStyle}, "Committed today")
-			);	
+			);
 		}
 		else if (this.props.activeDaysAgo <= 3){
-			labelStyle += " label-warning";	
+			labelStyle += " label-warning";
 		}
 		else {
-			labelStyle += " label-danger";	
+			labelStyle += " label-danger";
 		};
-		
+
 		return (
 			React.createElement("span", {className: labelStyle}, "Committed ", this.props.activeDaysAgo, " days ago")
-		);	
+		);
 	}
-		
+
 });
 
 var CoderView = React.createClass({displayName: "CoderView",
 	render: function(){
 		var githubURL = "https://github.com/" + this.props.githubUsername;
-		
+
 		return (
 
 			React.createElement("div", {className: "col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xs-offset-0 col-sm-offset-0"}, 
@@ -101,8 +102,15 @@ var CoderView = React.createClass({displayName: "CoderView",
 	}
 });
 
+
+var CoderBatchView = React.createClass({displayName: "CoderBatchView",
+		render : function (argument) {
+
+		}
+});
+
 var CoderListView = React.createClass({displayName: "CoderListView",
-	
+
 	render : function(){
 
 		var coders = this.props.coders || [];
@@ -110,21 +118,32 @@ var CoderListView = React.createClass({displayName: "CoderListView",
 		var coderViews = coders.map(function(coder){
 			key++;
 			return (
-				React.createElement(CoderView, { key: key, 
+				React.createElement(CoderView, {key: key, 
 						   	firstName: coder.firstName, 
 						   	lastName: coder.lastName, 
-							githubUsername: coder.username, 
-							activeDaysAgo: coder.active_days_ago, 
-							events: coder.events, 
+								githubUsername: coder.username, 
+								activeDaysAgo: coder.active_days_ago, 
+								events: coder.events, 
 						    repositoryList: coder.repositories})
 				);
 		});
 
+		var coderBatches = _.chunk(coderViews, 3);
+
+		var batches = coderBatches.map(function(coderBatch) {
+				return ( React.createElement("div", {className: "row user-row"}, 
+						coderBatch
+					) )
+				});
+
+
 		return (
-			React.createElement("div", {className: "row user-row"}, 
-				coderViews	
+			React.createElement("div", null, 
+				batches
 			)
 		);
+
+
 	}
 });
 
@@ -163,7 +182,7 @@ var AddCoderView = React.createClass({displayName: "AddCoderView",
 
 				  React.createElement("button", {type: "submit", onClick: this.addCoder, className: "btn btn-default", 
 				  	disabled: disabled}, "Add coder"), 
-				  
+
 				  React.createElement("button", {onClick: this.doRefresh, className: "btn btn-default"}, "Refresh")
 
 				)
@@ -172,7 +191,7 @@ var AddCoderView = React.createClass({displayName: "AddCoderView",
 	},
 
 	isDisabled : function(){
-		
+
 		var disabled = this.state.firstName.trim() === "" ||
     		this.state.lastName.trim() === "" ||
     		this.state.username.trim() === "";
@@ -188,30 +207,30 @@ var AddCoderView = React.createClass({displayName: "AddCoderView",
       		this.setState(state);
 		};
 	},
-	
+
 	doRefresh : function (e) {
 		$.get("/api/coders/refresh", function(data){
 			toastr.warning("Refreshing data for " +  data.coders + " coders");
 		});
 		e.preventDefault();
 	},
-	
+
 	addCoder : function(e){
-		
+
 		var self = this;
 		$.post("api/coders", this.state, function(){
 			toastr.warning('Added coder...');
-			
+
 			self.setState({
 				lastName : "",
 				firstName : "",
 				username : ""
 			});
-			
+
 		});
 
 		e.preventDefault();
-		
+
 	}
 });
 
@@ -226,16 +245,16 @@ var App = React.createClass({displayName: "App",
 	componentDidMount : function(){
 		var i = 1;
 		var self = this;
-		
+
 		socket.on('events_updated', function(){
-			
+
 			$.get("api/coders", this.state, function(coders){
 				toastr.warning('Coders updated!');
 				self.setState({coders : coders});
 			});
-			
+
 		});
-		
+
 		socket.on('coder_added', function(input){
 
 			toastr.warning('Coder added!');
@@ -263,7 +282,7 @@ var App = React.createClass({displayName: "App",
 			React.createElement("div", null, 
 				React.createElement("h1", null, "Github overview"), 
 				React.createElement("h2", null, "Coders"), 
-				React.createElement(AddCoderView, null), 	
+				React.createElement(AddCoderView, null), 
 				React.createElement(CoderListView, {coders: this.state.coders})
 			)
 
@@ -272,7 +291,6 @@ var App = React.createClass({displayName: "App",
 });
 
 var coders = JSON.parse(document.getElementById('coderList').innerHTML);
-
 
 React.render(
 		React.createElement(App, {coders: coders}),
