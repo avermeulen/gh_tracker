@@ -87,7 +87,7 @@ var CoderView = React.createClass({
 
 		return (
 
-			<div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xs-offset-0 col-sm-offset-0">
+			<div className="col-sm-4 col-md-4">
 				<div className="panel panel-default">
 				  	<div className="panel-heading">
 				  		<strong>{this.props.firstName} {this.props.lastName} - <a href={githubURL} target="_blank" > {this.props.githubUsername}</a></strong>

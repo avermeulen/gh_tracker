@@ -87,7 +87,7 @@ var CoderView = React.createClass({displayName: "CoderView",
 
 		return (
 
-			React.createElement("div", {className: "col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xs-offset-0 col-sm-offset-0"}, 
+			React.createElement("div", {className: "col-sm-4 col-md-4"}, 
 				React.createElement("div", {className: "panel panel-default"}, 
 				  	React.createElement("div", {className: "panel-heading"}, 
 				  		React.createElement("strong", null, this.props.firstName, " ", this.props.lastName, " - ", React.createElement("a", {href: githubURL, target: "_blank"}, " ", this.props.githubUsername))
