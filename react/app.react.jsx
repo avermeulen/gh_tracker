@@ -103,12 +103,6 @@ var CoderView = React.createClass({
 });
 
 
-var CoderBatchView = React.createClass({
-		render : function (argument) {
-
-		}
-});
-
 var CoderListView = React.createClass({
 
 	render : function(){

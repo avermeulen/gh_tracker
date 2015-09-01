@@ -23,8 +23,8 @@ module.exports = function (connection) {
 	};
 
 	this.findCommitsPerWeek = function(){
-		var sql = "select username, week(created_at), count(*) from coders join events where events.coder_id = coders.id group by username, week(created_at)"
+		var sql = "select username, week(created_at) as week, count(*) as commitCount from coders join events where events.coder_id = coders.id group by username, week(created_at)"
 		return query.execute(sql);
 	};
-	
+
 }

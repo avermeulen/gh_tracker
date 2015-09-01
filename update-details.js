@@ -21,7 +21,6 @@ module.exports = function (connection, io) {
 				return;
 			}
 
-
 			connection.query("select id from coders where username = ?", event.user, function (err, users) {
 				if(err){
 					logger.error(err.stack);
