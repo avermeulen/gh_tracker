@@ -11,7 +11,7 @@ var Coders = require('./coders');
 var CoderService = require('./coder-service');
 var GithubProcessor = require('./github-processor');
 var UpdateDetails = require('./update-details');
-var compression = require('compression')
+var compression = require('compression');
 
 var ConnectionProvider = require('./connection-provider');
 
