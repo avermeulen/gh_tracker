@@ -103,12 +103,6 @@ var CoderView = React.createClass({displayName: "CoderView",
 });
 
 
-var CoderBatchView = React.createClass({displayName: "CoderBatchView",
-		render : function (argument) {
-
-		}
-});
-
 var CoderListView = React.createClass({displayName: "CoderListView",
 
 	render : function(){
