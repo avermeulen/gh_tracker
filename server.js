@@ -11,6 +11,7 @@ var Coders = require('./coders');
 var CoderService = require('./coder-service');
 var GithubProcessor = require('./github-processor');
 var UpdateDetails = require('./update-details');
+var compression = require('compression')
 
 var ConnectionProvider = require('./connection-provider');
 
@@ -35,6 +36,7 @@ var serviceSetupCallback = function(connection){
 
 var myConnectionProvider = new ConnectionProvider(dbOptions, serviceSetupCallback);
 app.use(myConnectionProvider.setupProvider);
+app.use(compression())
 
 app.use(myConnection(mysql, dbOptions, 'pool'));
 //
