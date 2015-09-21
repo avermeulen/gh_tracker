@@ -28,6 +28,12 @@ var dbOptions = {
 };
 
 var serviceSetupCallback = function(connection){
+
+  if (!connection){
+    throw Error('There is a problem with your database connection')
+    return;
+  }
+
 	return {
 		coderService : new CoderService(connection),
 		githubProcessor : new GithubProcessor(new UpdateDetails(connection, io))
@@ -35,6 +41,7 @@ var serviceSetupCallback = function(connection){
 };
 
 var myConnectionProvider = new ConnectionProvider(dbOptions, serviceSetupCallback);
+
 app.use(myConnectionProvider.setupProvider);
 app.use(compression())
 
