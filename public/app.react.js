@@ -122,8 +122,8 @@ var CoderView = React.createClass({displayName: "CoderView",
 
 					React.createElement("div", {className: "panel-body"}, 
 						React.createElement(LastCodedBadgeView, {activeDaysAgo: this.props.activeDaysAgo}), 
-						React.createElement(Sparkline, {preset: "zero-bars", dataset: "5,6,8,7,5,3,2,3,7"})
-						
+						React.createElement(Sparkline, {preset: "hilite-last", dataset: this.props.commits})
+
 					)
 				)
 			)
@@ -147,6 +147,7 @@ var CoderListView = React.createClass({displayName: "CoderListView",
 								githubUsername: coder.username, 
 								activeDaysAgo: coder.active_days_ago, 
 								events: coder.events, 
+								commits: coder.commits, 
 						    repositoryList: coder.repositories})
 				);
 		});

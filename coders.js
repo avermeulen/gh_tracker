@@ -3,16 +3,32 @@ var GithubProcessor = require('./github-processor');
 var UpdateDetails = require('./update-details');
 var logger=require('./log.js');
 var _ = require('lodash');
+var Promise = require("bluebird");
+var join = Promise.join;
 
 module.exports = function(io){
 
 	this.list = function(req, res, next){
 		req.services(function(err, services){
 			var coderService = services.coderService;
-			coderService
-				.getCoderData()
-				.then(function(coders){
-					res.render('coders', {coders : JSON.stringify(coders)})
+
+			join(coderService.getCoderData(),
+				coderService.findCommitsPerWeek(),
+				function(coders, commitsPerWeek) {
+					console.log(commitsPerWeek)
+					coders = coders.map(function(coder){
+						if (_.has(commitsPerWeek, coder.username)){
+							var commits =  commitsPerWeek[coder.username];
+							coder.commits = commits.join(",");
+						}
+						else {
+							coder.commits = "";
+						}
+						return coder;
+					});
+
+					res.render('coders', {coders : JSON.stringify(coders),
+						commitsPerWeek : commitsPerWeek})
 				})
 				.catch(function(err){
 						logger.error(err.stack);
@@ -82,44 +98,9 @@ module.exports = function(io){
 			var coderService = services.coderService;
 			coderService
 				.findCommitsPerWeek()
-				.then(function(coderCommits) {
-
-						var min = _.min(coderCommits, function (commit) {
-							return commit.week;
-						});
-
-						var max = _.max(coderCommits, function (commit) {
-							return commit.week;
-						});
-
-						var commits = _.groupBy(coderCommits, function (commit) {
-							return commit.username;
-						});
-
-						var weekRange = _.range(min.week, max.week);
-
-						// -- ?
-						var coders = _.keys(commits);
-						var coderCommitStream = {};
-
-						coders.forEach(function(coder){
-							var coderCommits = commits[coder];
-
-							var coderCommitHistory = _.map(weekRange, function(week){
-								var commit = _.find(coderCommits, function	(commit) {
-									return commit.week === week;
-								});
-								return commit ? commit.commitCount : 0;
-							});
-
-							coderCommitStream[coderCommitHistory] = c;
-
-						});
-
-						res.send(coderCommitStream);
-
+				.then(function(coderCommitsPerWeek){
+					res.send( coderCommitsPerWeek);
 				});
-
 		});
 	}
 

@@ -1,7 +1,8 @@
 span.sparkline {
     display: inline-block;
-    width: 5em;
+    width: 7em;
     height: 15px;
     margin: 0 .2em;
     vertical-align: baseline;
+    float: right;
 }
