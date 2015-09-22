@@ -15,7 +15,6 @@ module.exports = function(io){
 			join(coderService.getCoderData(),
 				coderService.findCommitsPerWeek(),
 				function(coders, commitsPerWeek) {
-					console.log(commitsPerWeek)
 					coders = coders.map(function(coder){
 						if (_.has(commitsPerWeek, coder.username)){
 							var commits =  commitsPerWeek[coder.username];
