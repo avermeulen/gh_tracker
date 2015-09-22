@@ -81,6 +81,33 @@ var LastCodedBadgeView = React.createClass({displayName: "LastCodedBadgeView",
 
 });
 
+var Sparkline = React.createClass({displayName: "Sparkline",
+	componentDidMount : function(){
+
+	},
+
+	render : function(){
+
+	}
+
+});
+
+var Sparkline = React.createClass({displayName: "Sparkline",
+	componentDidMount : function(){
+		var el = React.findDOMNode(this),
+				data = sparky.parse.numbers(this.props.dataset),
+    		preset = sparky.presets.get(this.props.preset),
+    		options = sparky.util.getElementOptions(el, preset);
+    sparky.sparkline(el, data, options);
+	},
+
+	render : function(){
+		return (React.createElement("span", {className: "sparkline"}));
+	}
+
+});
+
+
 var CoderView = React.createClass({displayName: "CoderView",
 	render: function(){
 		var githubURL = "https://github.com/" + this.props.githubUsername;
@@ -94,7 +121,9 @@ var CoderView = React.createClass({displayName: "CoderView",
 			  		), 
 
 					React.createElement("div", {className: "panel-body"}, 
-						React.createElement(LastCodedBadgeView, {activeDaysAgo: this.props.activeDaysAgo})
+						React.createElement(LastCodedBadgeView, {activeDaysAgo: this.props.activeDaysAgo}), 
+						React.createElement(Sparkline, {preset: "zero-bars", dataset: "5,6,8,7,5,3,2,3,7"})
+						
 					)
 				)
 			)

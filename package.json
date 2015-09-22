@@ -22,11 +22,13 @@
     "mongoose": "^4.0.1",
     "mysql": "^2.6.1",
     "octonode": "^0.6.16",
+    "react-sparklines": "^1.1.1",
     "simple-get": "^1.3.0",
     "socket.io": "^1.3.5",
     "winston": "^1.0.0"
   },
   "devDependencies": {
+    "browserify": "^11.1.0",
     "gulp-react": "^3.0.1",
     "gulp-watch": "^4.3.5"
   }
