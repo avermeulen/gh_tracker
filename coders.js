@@ -6,50 +6,54 @@ var _ = require('lodash');
 var Promise = require("bluebird");
 var join = Promise.join;
 
+var coderCommitHistory = function(coderService){
+
+	return join(coderService.getCoderData(),
+		coderService.findCommitsPerWeek(),
+		function(coders, commitsPerWeek) {
+			console.log(commitsPerWeek);
+			var coderCommitHistory = coders.map(function(coder){
+				if (_.has(commitsPerWeek, coder.username)){
+					var commits =  commitsPerWeek[coder.username];
+					coder.commits = commits.join(",");
+					console.log(coder.username);
+					console.log(coder.commits);
+
+				}
+				else {
+					coder.commits = "";
+				}
+				return coder;
+			});
+			return coderCommitHistory;
+		});
+};
+
 module.exports = function(io){
 
 	this.list = function(req, res, next){
 		req.services(function(err, services){
 			var coderService = services.coderService;
-
-			join(coderService.getCoderData(),
-				coderService.findCommitsPerWeek(),
-				function(coders, commitsPerWeek) {
-					coders = coders.map(function(coder){
-						if (_.has(commitsPerWeek, coder.username)){
-							var commits =  commitsPerWeek[coder.username];
-							coder.commits = commits.join(",");
-						}
-						else {
-							coder.commits = "";
-						}
-						return coder;
-					});
-
-					res.render('coders', {coders : JSON.stringify(coders),
-						commitsPerWeek : commitsPerWeek})
-				})
-				.catch(function(err){
-						logger.error(err.stack);
-						return next(err);
+			coderCommitHistory(coderService)
+			.then(function(codersCommitHistory){
+				res.render('coders', {
+					coders : JSON.stringify(codersCommitHistory)
 				});
+			})
+			.catch(function(err){
+				next(err);
+			});
 		});
 	};
 
 	this.all = function(req, res, next){
 		req.services(function(err, services){
-
 			var coderService = services.coderService;
-			coderService
-				.getCoderData()
-				.then(function(coders){
-					res.send(coders);
-				})
-				.catch(function (err) {
-					logger.error(err.stack);
-					return next(err);
-				});
-
+			coderCommitHistory(coderService)
+			.then(function(err, codersCommitHistory){
+				if (err) return next(err);
+				res.send(codersCommitHistory);
+			});
 		});
 	};
 

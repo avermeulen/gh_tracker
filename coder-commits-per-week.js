@@ -2,19 +2,20 @@ var _ = require('lodash');
 
 module.exports =  function(coderCommits){
 
-  var min = _.min(coderCommits, function (commit) {
-    return commit.week;
-  });
+    var allCommits = _.flatten(coderCommits);
 
-    var max = _.max(coderCommits, function (commit) {
+    var min = _.min(allCommits, function (commit) {
+        return commit.week;
+    });
+
+    var max = _.max(allCommits, function (commit) {
       return commit.week;
     });
+    var weekRange = _.range(min.week, max.week + 1);
 
     var commits = _.groupBy(coderCommits, function (commit) {
       return commit.username;
     });
-
-    var weekRange = _.range(min.week, max.week);
 
     // -- ?
     var coders = _.keys(commits);
