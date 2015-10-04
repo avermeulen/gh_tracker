@@ -8,6 +8,11 @@ module.exports = function (dbParams, servicesSetup) {
 		this.dbParams = dbParams;
 		var pool = mysql.createPool(dbParams);
 
+        pool.on('connection', function (connection) {
+            //connection.query('SET SESSION auto_increment_increment=1')
+            console.log('new connection...')
+        });
+
     var setupProvider = function(req, res, next){
 
   	var poolConnection;
@@ -25,6 +30,7 @@ module.exports = function (dbParams, servicesSetup) {
   		var end = res.end;
   		res.end = function(data, encoding){
               if (poolConnection){
+                console.log('closing connection')
               	poolConnection.release();
               }
               res.end = end;

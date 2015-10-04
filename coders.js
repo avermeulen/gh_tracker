@@ -110,7 +110,7 @@ module.exports = function(io){
 			//
 			var githubProcessor = services.githubProcessor;
 			var coderService = services.coderService;
-
+			logger.info("do refresh");
 			coderService
 				.findAllUsernames()
 				.then(function (coders) {
