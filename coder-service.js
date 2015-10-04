@@ -28,13 +28,7 @@ module.exports = function (connection) {
 		return query
 			.execute(sql)
 			.then(function(results){
-				console.log(results);
 				return coderCommitsPerWeek(results);
-			})
-			.catch(function (err) {
-				console.log(err);
-
 			});
 	};
-
 }

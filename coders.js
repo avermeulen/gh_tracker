@@ -11,14 +11,10 @@ var coderCommitHistory = function(coderService){
 	return join(coderService.getCoderData(),
 		coderService.findCommitsPerWeek(),
 		function(coders, commitsPerWeek) {
-			console.log(commitsPerWeek);
 			var coderCommitHistory = coders.map(function(coder){
 				if (_.has(commitsPerWeek, coder.username)){
 					var commits =  commitsPerWeek[coder.username];
 					coder.commits = commits.join(",");
-					console.log(coder.username);
-					console.log(coder.commits);
-
 				}
 				else {
 					coder.commits = "";
@@ -50,9 +46,11 @@ module.exports = function(io){
 		req.services(function(err, services){
 			var coderService = services.coderService;
 			coderCommitHistory(coderService)
-			.then(function(err, codersCommitHistory){
-				if (err) return next(err);
-				res.send(codersCommitHistory);
+			.then(function(codersCommitHistory){
+				res.send( codersCommitHistory);
+			})
+			.catch(function(err){
+				next(err);
 			});
 		});
 	};

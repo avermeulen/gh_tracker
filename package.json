@@ -30,6 +30,9 @@
   "devDependencies": {
     "browserify": "^11.1.0",
     "gulp-react": "^3.0.1",
-    "gulp-watch": "^4.3.5"
+    "gulp-watch": "^4.3.5",
+    "request": "^2.64.0",
+    "reqwest": "^2.0.4",
+    "xhr2": "^0.1.3"
   }
 }
