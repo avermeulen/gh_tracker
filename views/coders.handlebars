@@ -1,7 +1,63 @@
+<div class="container">
 
-<script id="coderList" type="application/json">{{{coders}}}</script>
-<script id="commitsPerWeek" type="application/json">{{{commitsPerWeek}}}</script>
+    <h1>Coders</h1>
 
-<div class="container" id="coders">
+    <div class="row">
+        <form action="/coders" method="post">
+            <div class="col-md-8">
+                <table class="table">
+                    <thead>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            First name
+                        </th>
+                        <th>
+                            Last name
+                        </th>
+                        <th>
+                            username
+                        </th>
+                        <th>
+                            Term
+                        </th>
+                    </thead>
+                    <tbody>
+                        {{#coders}}
+                            <tr>
+                                <th>
+                                    <input type="checkbox" name="selected" value="{{coder_id}}">
+                                </th>
+                                <td>
+                                    {{firstName}}
+                                </td>
+                                <td>
+                                    {{lastName}}
+                                </td>
+                                <td>
+                                    {{username}}
+                                </td>
+                                <td>
+                                    {{term}}
+                                </td>
+                            </tr>
+                        {{/coders}}
+                    </tbody>
+                </table>
 
+            </div>
+            <div class="col-md-4">
+                <h3>Edit user term</h3>
+                <select class="form-control" name="term">
+                    <optgroup label="Select a term">
+                        <option value="t1">Term 1</option>
+                        <option value="t2">Term 2</option>
+                        <option value="t3">Term 3</option>
+                    </optgroup>
+                </select>
+                <input type="submit" name="name" value="Set term" class="btn btn-default">
+            </div>
+        </form>
+    </div>
 </div>

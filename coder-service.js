@@ -7,12 +7,17 @@ module.exports = function (connection) {
 	var query = new Query(connection);
 
 	this.getCoderData = function()  {
-		var coderSql = "select firstname as firstName, lastname as lastName, username, coder_id, min(datediff(date(now()), date(created_at))) active_days_ago from events, coders where coders.id = events.coder_id  group by coder_id order by active_days_ago;";
+		var coderSql = "select firstname as firstName, lastname as lastName, username, coder_id, min(datediff(date(now()), date(created_at))) active_days_ago, min(timediff(now(), created_at)) active_hours_ago from events, coders where coders.id = events.coder_id  group by coder_id order by active_days_ago;";
+		return query.execute(coderSql);
+	};
+
+	this.getCoders = function()  {
+		var coderSql = "select firstname as firstName, lastname as lastName, username, id as coder_id, term from coders";
 		return query.execute(coderSql);
 	};
 
 	this.findCoderByUsername = function(username){
-		return query.execute("select * from coders where username = ?", [username]);
+		return query.execute("select id, firstName, lastName, email, username from coders where username = ?", [username]);
 	};
 
 	this.createCoder = function(coderDetails){
@@ -22,6 +27,10 @@ module.exports = function (connection) {
 	this.findAllUsernames = function(cb){
 		return query.execute("select username from coders", []);
 	};
+
+	this.updateCoderTerms = function(term, coderIds){
+		return query.execute("update coders set term = ? where id in (?)", [term, coderIds]);
+	}
 
 	this.findCommitsPerWeek = function(){
 		var sql = "select username, week(created_at) as week, count(*) as commitCount from coders join events where events.coder_id = coders.id group by username, week(created_at)"

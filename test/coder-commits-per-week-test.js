@@ -1,9 +1,6 @@
 
 var coderCommitsPerWeek = require('../coder-commits-per-week');
-
 var coderCommits = require('./coder-commits.json');
-
-
 var assert = require('assert');
 
 describe("Coder Commits per Week", function(){

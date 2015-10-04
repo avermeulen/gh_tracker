@@ -16,9 +16,6 @@ var coderCommitHistory = function(coderService){
 				if (_.has(commitsPerWeek, coder.username)){
 					var commits =  commitsPerWeek[coder.username];
 					coder.commits = commits.join(",");
-					console.log(coder.username);
-					console.log(coder.commits);
-
 				}
 				else {
 					coder.commits = "";
@@ -36,7 +33,7 @@ module.exports = function(io){
 			var coderService = services.coderService;
 			coderCommitHistory(coderService)
 			.then(function(codersCommitHistory){
-				res.render('coders', {
+				res.render('index', {
 					coders : JSON.stringify(codersCommitHistory)
 				});
 			})

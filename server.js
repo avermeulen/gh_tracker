@@ -58,6 +58,31 @@ app.use(express.static('public'));
 var coders = new Coders(io);
 app.get('/', coders.list);
 
+app.get('/coders', function(req, res){
+    req.services(function(err, services){
+        services.coderService.getCoders()
+        .then(function(coders){
+            res.render('coders', {coders : coders});
+        });
+    });
+});
+
+app.post('/coders', function(req, res){
+    console.log(req.body);
+
+    req.services(function(err, services){
+        services
+            .coderService
+            .updateCoderTerms(req.body.term, req.body.selected)
+            .then(function(){
+                //res.render('coders', {coders : coders});
+
+                res.redirect('/coders');
+            });
+    });
+});
+
+
 app.get('/api/coders', coders.all);
 app.post('/api/coders', coders.add);
 app.get('/api/coders/refresh', coders.refresh);
