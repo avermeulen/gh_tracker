@@ -31,4 +31,15 @@ module.exports = function (connection) {
 				return coderCommitsPerWeek(results);
 			});
 	};
+
+	this.findMostRecentCommits = function() {
+		var sql = "select username, repositoryName, max(created_at) as lastCommitTime, count(*) activityCount from coders join events on events.coder_id = coders.id group by username, repositoryName order by lastCommitTime desc";
+		return query.execute(sql);
+	};
+
+	this.listAllRecentCommits = function() {
+		var sql = "select * from coders join events on events.coder_id = coders.id order by created_at desc";
+		return query.execute(sql);
+	};
+
 }

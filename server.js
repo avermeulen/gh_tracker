@@ -62,6 +62,8 @@ app.get('/api/coders', coders.all);
 app.post('/api/coders', coders.add);
 app.get('/api/coders/refresh', coders.refresh);
 app.get('/api/coders/commits-per-week', coders.commitsPerWeek);
+app.get('/api/coders/most-recent-commits', coders.mostRecentCommits);
+app.get('/api/coders/all-recent-commits', coders.allRecentCommits);
 
 var port = process.env.GH_TRACKER_PORT || 3000;
 var server = http.listen(port, function () {

@@ -3,8 +3,17 @@
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
+  "config": {
+      "blanket": {
+        "pattern": [ "" ],
+        "data-cover-never": [ "node_modules", "tests" ]
+      }
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "coverage" : "mocha --require blanket -R html-cov > coverage.html",
+    "show-coverage" : "open coverage.html"
+
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +37,7 @@
     "winston": "^1.0.0"
   },
   "devDependencies": {
+    "blanket": "^1.1.7",
     "browserify": "^11.1.0",
     "gulp-react": "^3.0.1",
     "gulp-watch": "^4.3.5",

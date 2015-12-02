@@ -100,10 +100,34 @@ module.exports = function(io){
 			coderService
 				.findCommitsPerWeek()
 				.then(function(coderCommitsPerWeek){
-					res.send( coderCommitsPerWeek);
+					res.send(coderCommitsPerWeek);
 				});
 		});
-	}
+	};
+
+	this.mostRecentCommits = function(req, res) {
+		req.services(function(err, services){
+			var coderService = services.coderService;
+			coderService
+				.findMostRecentCommits()
+				.then(function(commits){
+					res.send(commits);
+				});
+		});
+	};
+
+	this.allRecentCommits = function(req, res) {
+		req.services(function(err, services){
+			var coderService = services.coderService;
+			coderService
+				.listAllRecentCommits()
+				.then(function(commits){
+					res.send(commits);
+				});
+		});
+	};
+
+
 
 	this.refresh = function (req, res) {
 		req.services(function(err, services){
