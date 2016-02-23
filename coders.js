@@ -27,6 +27,13 @@ var coderCommitHistory = function(coderService){
 
 module.exports = function(io){
 
+	var coderService = function(req, cb){
+		req.services(function(err, services){
+			var coderService = services.coderService;
+			cb(coderService, services)
+		});
+	};
+
 	this.list = function(req, res, next){
 		req.services(function(err, services){
 			var coderService = services.coderService;
@@ -41,6 +48,21 @@ module.exports = function(io){
 			});
 		});
 	};
+
+	this.allCoders = function(req, res, next){
+		coderService(req, function(service){
+
+			service
+			.findAllCoders()
+			.then(function(coders){
+				res.send(coders)
+			})
+			.catch(function(err){
+				next(err);
+			});
+
+		});
+	}
 
 	this.all = function(req, res, next){
 		req.services(function(err, services){
@@ -150,5 +172,16 @@ module.exports = function(io){
 				});
 		});
 	};
+
+	this.recentActiveRepositories = function (req, res, next) {
+		req.services(function(err, services){
+			const coderService = services.coderService;
+			coderService
+				.recentActiveRepositories(Number(req.params.days))
+				.then(function(repositories){
+					res.send(repositories);
+				});
+		});
+	}
 
 };

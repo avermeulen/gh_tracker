@@ -258,6 +258,25 @@ var AddCoderView = React.createClass({
 	}
 });
 
+/*
+var RepositoryListEntry = React.createClass({
+
+});
+
+var RepositoryList = React.createClass({
+
+	this.props.repositories.map(
+		function(repository){
+			return <RepositoryListEntry repoName="repository.name" />
+		}
+	)
+
+	return(<table className="table">
+
+	</table>);
+});
+*/
+
 var App = React.createClass({
 
 	getInitialState : function(){
@@ -314,9 +333,11 @@ var App = React.createClass({
 	}
 });
 
-var coders = JSON.parse(document.getElementById('coderList').innerHTML);
 
-React.render(
-		<App coders={coders}/>,
-		document.getElementById('coders')
-);
+var showActivity = function(){
+	var coders = JSON.parse(document.getElementById('coderList').innerHTML);
+	React.render(
+			<App coders={coders}/>,
+			document.getElementById('coders')
+	);
+};

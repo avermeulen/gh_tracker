@@ -314,9 +314,12 @@ var App = React.createClass({displayName: "App",
 	}
 });
 
-var coders = JSON.parse(document.getElementById('coderList').innerHTML);
 
-React.render(
-		React.createElement(App, {coders: coders}),
-		document.getElementById('coders')
-);
+var showActivity = function(){
+	var coders = JSON.parse(document.getElementById('coderList').innerHTML);
+	React.render(
+			React.createElement(App, {coders: coders}),
+			document.getElementById('coders')
+	);
+	
+};

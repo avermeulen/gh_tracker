@@ -19,6 +19,10 @@ module.exports = function (connection) {
 		return query.execute("insert into coders set ?", coderDetails)
 	};
 
+	this.findAllCoders = function(){
+		return query.execute("select * from coders order by id desc");
+	}
+
 	this.findAllUsernames = function(cb){
 		return query.execute("select username from coders", []);
 	};
@@ -41,5 +45,10 @@ module.exports = function (connection) {
 		var sql = "select * from coders join events on events.coder_id = coders.id order by created_at desc";
 		return query.execute(sql);
 	};
+
+	this.recentActiveRepositories = function(inDays){
+		var sql = "select repositoryName, max(created_at) activeDatetime from events where created_at > date_sub(now(), interval ? day) group by repositoryName order by activeDatetime desc;"
+		return query.execute(sql, inDays)
+	}
 
 }

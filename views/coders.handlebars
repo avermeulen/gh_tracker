@@ -8,6 +8,16 @@
 
 <script type="text/javascript">
     window.onhashchange = function(){
-        console.log(location.hash);
+        switch(location.hash){
+            case '' :
+            case '#activity' :
+                showActivity();
+                break;
+            case '#repositories' :
+                document.getElementById('coders').innerHTML = "";
+                break;
+            default:
+                showActivity();
+        }
     }
 </script>
