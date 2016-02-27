@@ -4,6 +4,9 @@ var UpdateDetails = require('./update-details');
 var logger=require('./log.js');
 var _ = require('lodash');
 var Promise = require("bluebird");
+
+var termDropdownUtil = require('./utils/term-dropdown');
+
 var join = Promise.join;
 
 var coderCommitHistory = function(coderService){
@@ -50,19 +53,42 @@ module.exports = function(io){
 	};
 
 	this.allCoders = function(req, res, next){
+
 		coderService(req, function(service){
 
 			service
 			.findAllCoders()
 			.then(function(coders){
-				res.send(coders)
+
+				var coderList = termDropdownUtil(coders);
+				res.render("coder-list", {
+					coders : coderList
+				});
+
 			})
 			.catch(function(err){
 				next(err);
 			});
 
 		});
-	}
+	};
+
+	this.updateCodersTerm = function(req, res, next){
+		coderService(req, function(service){
+			var data = req.body;
+			data.id = req.params.coder_id;
+
+			service
+				.updateCoderTerm(data)
+				.then(function(){
+					res.redirect("/coders");
+				})
+				.catch(function(err){
+					next(err);
+				});
+
+		});
+	};
 
 	this.all = function(req, res, next){
 		req.services(function(err, services){

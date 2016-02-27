@@ -48,7 +48,13 @@ module.exports = function (connection) {
 
 	this.recentActiveRepositories = function(inDays){
 		var sql = "select repositoryName, max(created_at) activeDatetime from events where created_at > date_sub(now(), interval ? day) group by repositoryName order by activeDatetime desc;"
-		return query.execute(sql, inDays)
+		return query.execute(sql, inDays);
 	}
+
+	this.updateCoderTerm = function(data){
+		console.log(data);
+		var sql = "update coders set term = ? where id = ?";
+		return query.execute(sql, [data.term, data.id] );
+	};
 
 }

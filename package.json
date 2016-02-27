@@ -23,7 +23,7 @@
     "body-parser": "^1.12.2",
     "compression": "^1.5.2",
     "express": "^4.12.3",
-    "express-handlebars": "^2.0.0",
+    "express-handlebars": "^3.0.0",
     "express-myconnection": "^1.0.4",
     "h5bp": "^0.1.4",
     "lodash": "^3.10.1",
