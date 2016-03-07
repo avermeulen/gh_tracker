@@ -22,7 +22,7 @@
         </td>
         <td>
             <form class="" action="/coders/update_term/{{id}}" method="post">
-                
+
                 <select class="" name="term">
                     {{#terms}}
                         <option value="{{this.name}}" {{this.selected}}>{{this.name}}</option>
@@ -34,3 +34,12 @@
     </tr>
     {{/coders}}
 </table>
+<script type="text/javascript">
+
+    var termSelect = document.querySelector('.term');
+    termSelect.addEventListener('onchange', function(){
+        alert("go!");
+    });
+
+
+</script>
