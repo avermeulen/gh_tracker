@@ -7,8 +7,9 @@ module.exports = function (connection) {
 	var query = new Query(connection);
 
 	this.getCoderData = function()  {
-		var coderSql = "select firstname as firstName, lastname as lastName, username, coder_id, min(datediff(date(now()), date(created_at))) active_days_ago from events, coders where coders.id = events.coder_id  group by coder_id order by active_days_ago;";
-		return query.execute(coderSql);
+		//var coderSql = "select firstname as firstName, lastname as lastName, username, coder_id, min(datediff(date(now()), date(created_at))) active_days_ago from events, coders where coders.id = events.coder_id  group by coder_id order by active_days_ago;";
+		var coderSql = "call UsersWithRepos()"
+		return query.executeProc(coderSql);
 	};
 
 	this.findCoderByUsername = function(username){
@@ -20,7 +21,7 @@ module.exports = function (connection) {
 	};
 
 	this.findAllCoders = function(){
-		return query.execute("select * from coders order by id desc");
+		return query.execute("call UsersWithRepos()");
 	}
 
 	this.findAllUsernames = function(cb){

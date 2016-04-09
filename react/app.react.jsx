@@ -111,6 +111,7 @@ var Sparkline = React.createClass({displayName: "Sparkline",
 var CoderView = React.createClass({
 	render: function(){
 		var githubURL = "https://github.com/" + this.props.githubUsername;
+		var githubRepoURL = "https://github.com/" + this.props.activeRepo;
 
 		return (
 
@@ -121,7 +122,9 @@ var CoderView = React.createClass({
 			  		</div>
 
 					<div className="panel-body">
-						<LastCodedBadgeView activeDaysAgo={this.props.activeDaysAgo}/>
+						<a href={githubRepoURL}>
+							<LastCodedBadgeView activeDaysAgo={this.props.activeDaysAgo}/>
+						</a>
 						<Sparkline preset="hilite-last" dataset={this.props.commits}  />
 
 					</div>
@@ -139,16 +142,19 @@ var CoderListView = React.createClass({
 		var coders = this.props.coders || [];
 		var key = 0;
 		var coderViews = coders.map(function(coder){
+			console.log("============");
+			console.log(coder.active_repo);
 			key++;
 			return (
 				<CoderView key={key}
-						   	firstName={coder.firstName}
-						   	lastName={coder.lastName}
-								githubUsername={coder.username}
-								activeDaysAgo = {coder.active_days_ago}
-								events={coder.events}
-								commits={coder.commits}
-						    repositoryList={coder.repositories} />
+				   	firstName={coder.firstName}
+				   	lastName={coder.lastName}
+					githubUsername={coder.username}
+					activeDaysAgo = {coder.active_days_ago}
+					events={coder.events}
+					commits={coder.commits}
+					activeRepo={coder.active_repo}
+				    repositoryList={coder.repositories} />
 				);
 		});
 

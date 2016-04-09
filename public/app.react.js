@@ -111,6 +111,7 @@ var Sparkline = React.createClass({displayName: "Sparkline",
 var CoderView = React.createClass({displayName: "CoderView",
 	render: function(){
 		var githubURL = "https://github.com/" + this.props.githubUsername;
+		var githubRepoURL = "https://github.com/" + this.props.activeRepo;
 
 		return (
 
@@ -121,7 +122,9 @@ var CoderView = React.createClass({displayName: "CoderView",
 			  		), 
 
 					React.createElement("div", {className: "panel-body"}, 
-						React.createElement(LastCodedBadgeView, {activeDaysAgo: this.props.activeDaysAgo}), 
+						React.createElement("a", {href: githubRepoURL}, 
+							React.createElement(LastCodedBadgeView, {activeDaysAgo: this.props.activeDaysAgo})
+						), 
 						React.createElement(Sparkline, {preset: "hilite-last", dataset: this.props.commits})
 
 					)
@@ -139,16 +142,19 @@ var CoderListView = React.createClass({displayName: "CoderListView",
 		var coders = this.props.coders || [];
 		var key = 0;
 		var coderViews = coders.map(function(coder){
+			console.log("============");
+			console.log(coder.active_repo);
 			key++;
 			return (
 				React.createElement(CoderView, {key: key, 
-						   	firstName: coder.firstName, 
-						   	lastName: coder.lastName, 
-								githubUsername: coder.username, 
-								activeDaysAgo: coder.active_days_ago, 
-								events: coder.events, 
-								commits: coder.commits, 
-						    repositoryList: coder.repositories})
+				   	firstName: coder.firstName, 
+				   	lastName: coder.lastName, 
+					githubUsername: coder.username, 
+					activeDaysAgo: coder.active_days_ago, 
+					events: coder.events, 
+					commits: coder.commits, 
+					activeRepo: coder.active_repo, 
+				    repositoryList: coder.repositories})
 				);
 		});
 
@@ -258,6 +264,25 @@ var AddCoderView = React.createClass({displayName: "AddCoderView",
 	}
 });
 
+/*
+var RepositoryListEntry = React.createClass({
+
+});
+
+var RepositoryList = React.createClass({
+
+	this.props.repositories.map(
+		function(repository){
+			return <RepositoryListEntry repoName="repository.name" />
+		}
+	)
+
+	return(<table className="table">
+
+	</table>);
+});
+*/
+
 var App = React.createClass({displayName: "App",
 
 	getInitialState : function(){
@@ -321,5 +346,4 @@ var showActivity = function(){
 			React.createElement(App, {coders: coders}),
 			document.getElementById('coders')
 	);
-	
 };
