@@ -1,16 +1,20 @@
 var _ = require('lodash');
 
+/*
+this logic only work for commits in the same year.
+If commits span the end of one year and the start of another it doesn't work.
+
+Weeks 48, 50, 51, 2, 3 won't work...
+*/
+
 module.exports =  function(coderCommits){
 
     var allCommits = _.flatten(coderCommits);
 
-    var min = _.min(allCommits, function (commit) {
-        return commit.week;
-    });
+    var min = _.min(allCommits, (commit) => commit.week);
 
-    var max = _.max(allCommits, function (commit) {
-      return commit.week;
-    });
+    var max = _.max(allCommits, (commit) => commit.week);
+
     var weekRange = _.range(min.week, max.week + 1);
 
     var commits = _.groupBy(coderCommits, function (commit) {

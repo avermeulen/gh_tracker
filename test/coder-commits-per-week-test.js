@@ -10,7 +10,8 @@ describe("Coder Commits per Week", function(){
 
     it("should find consecutive weeks data", function(){
 
-        var coderCommits = [ { "username": "avermeulen", "week": 19, "commitCount" : 1 },
+        var coderCommits = [
+          { "username": "avermeulen", "week": 19, "commitCount" : 1 },
           { "username": "avermeulen", "week" : 20, "commitCount" : 6 },
           { "username": "avermeulen", "week" : 21, "commitCount" : 2 },
           { "username": "ayabongaqwabi", "week" : 19, "commitCount" : 1 },
@@ -41,4 +42,23 @@ describe("Coder Commits per Week", function(){
 
     });
 
+    /*
+    it("should handle year ends", function(){
+
+        var coderCommits = [
+          { "username": "avermeulen", "week": 48, "commitCount" : 1 },
+          { "username": "avermeulen", "week" : 49, "commitCount" : 6 },
+          { "username": "avermeulen", "week" : 7, "commitCount" : 2 },
+          { "username": "ayabongaqwabi", "week" : 8, "commitCount" : 1 },
+          { "username": "ayabongaqwabi", "week" : 7, "commitCount" : 1 },
+          { "username": "ayabongaqwabi", "week" : 45, "commitCount" : 1 }];
+
+          var ccpw = coderCommitsPerWeek(coderCommits);
+
+          assert.deepEqual(ccpw, {
+                'avermeulen' : [1,6,2],
+                'ayabongaqwabi' : [1,1,1]});
+
+    });
+    */
 });

@@ -20,18 +20,14 @@ module.exports = function (connection) {
 		return query.execute("insert into coders set ?", coderDetails)
 	};
 
-	this.findAllCoders = function(){
-		return query.execute("call UsersWithRepos()");
-	}
-
 	this.findAllUsernames = function(cb){
 		return query.execute("select username from coders", []);
 	};
 
 	this.findCommitsPerWeek = function(){
-		var sql = "select username, week(created_at) as week, count(*) as commitCount from coders join events where events.coder_id = coders.id group by username, week(created_at)"
+		var sql = "call UserCommitsPerWeekForCurrentYear()"
 		return query
-			.execute(sql)
+			.executeProc(sql)
 			.then(function(results){
 				return coderCommitsPerWeek(results);
 			});

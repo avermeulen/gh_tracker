@@ -55,9 +55,9 @@ module.exports = function(io){
 	this.allCoders = function(req, res, next){
 
 		coderService(req, function(service){
-
+			
 			service
-			.findAllCoders()
+			.getCoderData()
 			.then(function(coders){
 
 				var coderList = termDropdownUtil(coders);
