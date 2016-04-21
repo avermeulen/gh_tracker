@@ -4,16 +4,20 @@
   "description": "",
   "main": "index.js",
   "config": {
-      "blanket": {
-        "pattern": [ "" ],
-        "data-cover-never": [ "node_modules", "tests" ]
-      }
+    "blanket": {
+      "pattern": [
+        ""
+      ],
+      "data-cover-never": [
+        "node_modules",
+        "tests"
+      ]
+    }
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "coverage" : "mocha --require blanket -R html-cov > coverage.html",
-    "show-coverage" : "open coverage.html"
-
+    "coverage": "mocha --require blanket -R html-cov > coverage.html",
+    "show-coverage": "open coverage.html"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +25,7 @@
     "async": "^0.9.0",
     "bluebird": "^2.9.13",
     "body-parser": "^1.12.2",
+    "co": "^4.6.0",
     "compression": "^1.5.2",
     "express": "^4.12.3",
     "express-handlebars": "^3.0.0",

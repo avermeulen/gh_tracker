@@ -4,13 +4,32 @@ var UpdateDetails = require('./update-details');
 var logger=require('./log.js');
 var _ = require('lodash');
 var Promise = require("bluebird");
-
+var co = require('co');
 var termDropdownUtil = require('./utils/term-dropdown');
-
 var join = Promise.join;
 
 var coderCommitHistory = function(coderService){
 
+	return co(function *(){
+
+		var coders = yield coderService.getCoderData();
+		var commitsPerWeek = yield coderService.findCommitsPerWeek();
+
+		var coderCommitHistory = coders.map(function(coder){
+			if (_.has(commitsPerWeek, coder.username)){
+				var commits =  commitsPerWeek[coder.username];
+				coder.commits = commits.join(",");
+			}
+			else {
+				coder.commits = "";
+			}
+			return coder;
+		});
+
+		return coderCommitHistory;
+	});
+
+	/*
 	return join(coderService.getCoderData(),
 		coderService.findCommitsPerWeek(),
 		function(coders, commitsPerWeek) {
@@ -26,6 +45,7 @@ var coderCommitHistory = function(coderService){
 			});
 			return coderCommitHistory;
 		});
+	*/
 };
 
 module.exports = function(io){
@@ -40,14 +60,20 @@ module.exports = function(io){
 	this.list = function(req, res, next){
 		req.services(function(err, services){
 			var coderService = services.coderService;
-			coderCommitHistory(coderService)
-			.then(function(codersCommitHistory){
-				res.render('coders', {
-					coders : JSON.stringify(codersCommitHistory)
-				});
-			})
-			.catch(function(err){
-				next(err);
+			co(function * (){
+				try{
+					console.log("list...");
+
+					var codersCommitHistory = yield coderCommitHistory(coderService);
+					console.log("list...");
+
+					res.render('coders', {
+						coders : JSON.stringify(codersCommitHistory)
+					});
+				}
+				catch(e){
+					next(err);
+				}
 			});
 		});
 	};
@@ -55,7 +81,7 @@ module.exports = function(io){
 	this.allCoders = function(req, res, next){
 
 		coderService(req, function(service){
-			
+
 			service
 			.getCoderData()
 			.then(function(coders){

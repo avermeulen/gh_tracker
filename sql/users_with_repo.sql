@@ -1,5 +1,5 @@
 
-drop PROCEDURE UsersWithRepos;
+drop PROCEDURE IF EXISTS UsersWithRepos;
 
 DELIMITER //
 

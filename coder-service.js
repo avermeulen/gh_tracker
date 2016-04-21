@@ -1,19 +1,20 @@
 var Promise = require("bluebird"),
-		Query = require("./query-promise"),
-		coderCommitsPerWeek = require('./coder-commits-per-week');
+	Query = require("./query-promise"),
+	coderCommitsPerWeek = require('./coder-commits-per-week'),
+	co = require('co');;
 
 module.exports = function (connection) {
 
 	var query = new Query(connection);
 
 	this.getCoderData = function()  {
-		//var coderSql = "select firstname as firstName, lastname as lastName, username, coder_id, min(datediff(date(now()), date(created_at))) active_days_ago from events, coders where coders.id = events.coder_id  group by coder_id order by active_days_ago;";
 		var coderSql = "call UsersWithRepos()"
 		return query.executeProc(coderSql);
 	};
 
 	this.findCoderByUsername = function(username){
-		return query.execute("select * from coders where username = ?", [username]);
+		return query.execute("select * from coders where username = ?",
+			[username]);
 	};
 
 	this.createCoder = function(coderDetails){
@@ -25,12 +26,11 @@ module.exports = function (connection) {
 	};
 
 	this.findCommitsPerWeek = function(){
-		var sql = "call UserCommitsPerWeekForCurrentYear()"
-		return query
-			.executeProc(sql)
-			.then(function(results){
-				return coderCommitsPerWeek(results);
-			});
+		return co(function *() {
+			var sql = "call UserCommitsPerWeekForCurrentYear()";
+			var commitsPerWeek = yield query.executeProc(sql);
+			return coderCommitsPerWeek(commitsPerWeek);
+		});
 	};
 
 	this.findMostRecentCommits = function() {
@@ -53,5 +53,4 @@ module.exports = function (connection) {
 		var sql = "update coders set term = ? where id = ?";
 		return query.execute(sql, [data.term, data.id] );
 	};
-
 }
