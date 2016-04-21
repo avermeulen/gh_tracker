@@ -23,12 +23,14 @@
         <td>
             <form class="" action="/coders/update_term/{{coder_id}}" method="post">
 
-                <select class="" name="stage_id">
+                <select class="form-control input-sm" name="stage_id">
                     {{#terms}}
                         <option value="{{this.id}}" {{this.selected}}>{{this.name}}</option>
                     {{/terms}}
                 </select>
-                <input type="submit" name="name" value="Submit">
+        </td>
+        <td>
+                <input type="submit" class="btn btn-info" name="name" value="Submit">
             </form>
         </td>
     </tr>
