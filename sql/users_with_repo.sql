@@ -22,7 +22,7 @@ GO
             firstName as firstName,
             lastName as lastName,
             email,
-            term,
+            stage_id,
             repositoryName as active_repo,
             created_at as last_active_at,
             datediff(date(now()), date(created_at)) active_days_ago

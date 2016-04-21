@@ -29,23 +29,7 @@ var coderCommitHistory = function(coderService){
 		return coderCommitHistory;
 	});
 
-	/*
-	return join(coderService.getCoderData(),
-		coderService.findCommitsPerWeek(),
-		function(coders, commitsPerWeek) {
-			var coderCommitHistory = coders.map(function(coder){
-				if (_.has(commitsPerWeek, coder.username)){
-					var commits =  commitsPerWeek[coder.username];
-					coder.commits = commits.join(",");
-				}
-				else {
-					coder.commits = "";
-				}
-				return coder;
-			});
-			return coderCommitHistory;
-		});
-	*/
+
 };
 
 module.exports = function(io){
@@ -80,23 +64,45 @@ module.exports = function(io){
 
 	this.allCoders = function(req, res, next){
 
-		coderService(req, function(service){
+		req.services(function(err, services){
 
-			service
-			.getCoderData()
-			.then(function(coders){
+			//cb(coderService, services)
+			co(function *() {
 
-				var coderList = termDropdownUtil(coders);
-				res.render("coder-list", {
-					coders : coderList
-				});
+				try{
+					var service = services.coderService;
+					var coders = yield service.getCoderData();
+					var	coderStages = yield service.coderStages();
 
-			})
-			.catch(function(err){
-				next(err);
+					var coderList = termDropdownUtil(coders, coderStages);
+					res.render("coder-list", {
+						coders : coderList
+					});
+
+				}
+				catch(err){
+					next(err);
+				}
 			});
-
 		});
+
+		// coderService(req, function(service){
+		//
+		// 	service
+		// 	.getCoderData()
+		// 	.then(function(coders){
+		//
+		// 		var coderList = termDropdownUtil(coders);
+		// 		res.render("coder-list", {
+		// 			coders : coderList
+		// 		});
+		//
+		// 	})
+		// 	.catch(function(err){
+		// 		next(err);
+		// 	});
+		//
+		// });
 	};
 
 	this.updateCodersTerm = function(req, res, next){

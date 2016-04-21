@@ -48,9 +48,13 @@ module.exports = function (connection) {
 		return query.execute(sql, inDays);
 	}
 
+	this.coderStages = function(inDays){
+		return query.execute("select id, stage_name from coder_stages;");
+	}
+
 	this.updateCoderTerm = function(data){
 		console.log(data);
-		var sql = "update coders set term = ? where id = ?";
-		return query.execute(sql, [data.term, data.id] );
+		var sql = "update coders set stage_id = ? where id = ?";
+		return query.execute(sql, [data.stage_id, data.id] );
 	};
 }
